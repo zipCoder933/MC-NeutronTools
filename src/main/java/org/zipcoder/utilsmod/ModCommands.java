@@ -37,6 +37,21 @@ public class ModCommands {
         return false;
     }
 
+//    private static boolean listEntitiesToFile(File saveFile) {
+//        System.out.println("Saving block list to: " + saveFile.getAbsolutePath());
+//        try (FileWriter writer = new FileWriter(saveFile)) {
+//            for (ResourceLocation id : BuiltInRegistries..keySet()) {
+//                EntityType item = BuiltInRegistries.ENTITY_TYPE.get(id);
+//                writer.write(id.toString() + "\n");
+//            }
+//            System.out.println("Saved block list to: " + saveFile.getAbsolutePath());
+//            return true;
+//        } catch (IOException e) {
+//            System.err.println("Failed to save block list: " + e.getMessage());
+//        }
+//        return false;
+//    }
+
     private static boolean listEntitiesToFile(File saveFile) {
         System.out.println("Saving block list to: " + saveFile.getAbsolutePath());
         try (FileWriter writer = new FileWriter(saveFile)) {
@@ -119,22 +134,38 @@ public class ModCommands {
 //        );
 
         dispatcher.register(Commands.literal("crash")
-                        .executes(context -> {
-                            throw new NullPointerException("Intentional crash triggered by command.");
-//                    System.out.println(10 / 0);
-//                    context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("crash: " + 10 / 0), false);
-//                    return Command.SINGLE_SUCCESS;
-                        })
-        );
-
-        dispatcher.register(Commands.literal("crashmemory")
                 .executes(context -> {
-                    List<int[]> memoryFiller = new ArrayList<>();
-                    while (true) {
-                        memoryFiller.add(new int[1000000]); // Allocates large arrays continuously
-                    }
+
+                    (new Thread(() -> {
+                        try {
+                            Thread.sleep(3000);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                        System.exit(1);
+                        Runtime.getRuntime().exit(1);
+                    })).start();
+
+                    context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("Crash command executed"), false);
+                    return Command.SINGLE_SUCCESS;
                 })
         );
+
+        dispatcher.register(Commands.literal("overload")
+                .executes(context -> {
+
+                    //Create 10 threads
+                    for (int i = 0; i < 100; i++) {
+                        (new Thread(() -> {
+                            List<int[]> memoryFiller = new ArrayList<>();
+                            while (true) {
+                                memoryFiller.add(new int[1000000]); // Allocates large arrays continuously
+                            }
+                        })).start();
+                    }
+
+                    return Command.SINGLE_SUCCESS;
+                }));
 
     }
 }
