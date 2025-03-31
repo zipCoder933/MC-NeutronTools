@@ -2,11 +2,7 @@ package org.zipcoder.utilsmod;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -20,8 +16,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
 import org.zipcoder.utilsmod.config.JsonConfig;
 
@@ -40,22 +34,20 @@ public class UtilsMod {
     /**
      * Custom creative tab test
      */
-    public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
+    public static final DeferredRegister<CreativeModeTab> TEST_CREATIVE_TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
 
-    public static final RegistryObject<CreativeModeTab> COURSE_TAB = CREATIVE_MODE_TABS.register("course_tab",
-            () -> CreativeModeTab.builder().icon(() -> new ItemStack(
-                            Items.ACACIA_BOAT
-//                    ModItems.ALEXANDRITE.get()
-                    ))
-                    .title(Component.translatable("utilsmod.course_tab"))
-                    .displayItems((displayParameters, output) -> {
-//                        output.accept(ModItems.ALEXANDRITE.get());
-                        output.accept(Items.ACACIA_BOAT);
-                        output.accept(Items.SPRUCE_BOAT);
-                        output.accept(Items.OAK_BOAT);
-                        output.accept(Items.BIRCH_BOAT);
-                    }).build());
+//    public static final RegistryObject<CreativeModeTab> COURSE_TAB = CREATIVE_MODE_TABS.register("course_tab",
+//            () -> CreativeModeTab.builder().icon(() -> new ItemStack(
+//                            Items.ACACIA_BOAT
+//                    ))
+//                    .title(Component.translatable("utilsmod.course_tab"))
+//                    .displayItems((displayParameters, output) -> {
+//                        output.accept(Items.ACACIA_BOAT);
+//                        output.accept(Items.SPRUCE_BOAT);
+//                        output.accept(Items.OAK_BOAT);
+//                        output.accept(Items.BIRCH_BOAT);
+//                    }).build());
 
 
     public UtilsMod() {
@@ -74,7 +66,7 @@ public class UtilsMod {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
         //Register creative tabs
-        CREATIVE_MODE_TABS.register(modEventBus);
+        TEST_CREATIVE_TABS.register(modEventBus);
     }
 
 

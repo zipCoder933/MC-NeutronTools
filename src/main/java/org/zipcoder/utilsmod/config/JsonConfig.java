@@ -13,7 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class JsonConfig {
-    final JsonFile file;
+    public final JsonFile file;
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     public JsonConfig() {
@@ -85,12 +85,14 @@ public class JsonConfig {
         public String[] removeCreativeTabs = {};
 
         public TabEntry[] removeItems = {
-                new TabEntry("creativetab.course_tab", new String[]{"test"})
+                new TabEntry("test.course_tab", new String[]{"myMod:testItem"})
         };
 
         public TabEntry[] addItems = {
-                new TabEntry("creativetab.course_tab", new String[]{"test"})
+                new TabEntry("test.course_tab", new String[]{"myMod:testItem"})
         };
+
+        public boolean crashCommands = false;
     }
 
     public static class TabEntry {
