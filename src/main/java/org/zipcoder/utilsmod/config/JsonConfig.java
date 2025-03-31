@@ -15,15 +15,38 @@ import java.nio.file.Paths;
 import java.util.logging.Logger;
 
 public class JsonConfig {
-    public final JsonFile file;
+    public JsonFile file;
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
+
+    public static class JsonFile {
+        public String[] removeCreativeTabs = {};
+
+        public TabEntry[] removeItems = {
+                new TabEntry("test.course_tab", new String[]{"myMod:testItem"})
+        };
+
+        public TabEntry[] addItems = {
+                new TabEntry("test.course_tab", new String[]{"myMod:testItem"})
+        };
+
+        public boolean crashCommands = false;
+    }
+
+    public static class TabEntry {
+        public TabEntry(String tab, String[] items) {
+            this.creativeTab = tab;
+            this.items = items;
+        }
+
+        public String creativeTab;
+        public String[] items;
+    }
+
     public JsonConfig() {
-        // Write to file
         Path filePath = Paths.get("config", "modpack_utils.json");
 
         if (filePath.toFile().exists()) {// Read from file
-
             try (FileReader reader = new FileReader(filePath.toFile())) {
                 file = GSON.fromJson(reader, JsonFile.class);
             } catch (IOException e) {
@@ -31,7 +54,6 @@ public class JsonConfig {
             }
 
         } else {//Write to file
-
             file = new JsonFile();
             try (FileWriter writer = new FileWriter(filePath.toFile())) {
                 GSON.toJson(file, writer);
@@ -83,28 +105,6 @@ public class JsonConfig {
         return false;
     }
 
-    public static class JsonFile {
-        public String[] removeCreativeTabs = {};
 
-        public TabEntry[] removeItems = {
-                new TabEntry("test.course_tab", new String[]{"myMod:testItem"})
-        };
-
-        public TabEntry[] addItems = {
-                new TabEntry("test.course_tab", new String[]{"myMod:testItem"})
-        };
-
-        public boolean crashCommands = false;
-    }
-
-    public static class TabEntry {
-        public TabEntry(String tab, String[] items) {
-            this.creativeTab = tab;
-            this.items = items;
-        }
-
-        public String creativeTab;
-        public String[] items;
-    }
 
 }
