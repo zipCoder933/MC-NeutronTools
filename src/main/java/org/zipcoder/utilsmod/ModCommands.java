@@ -11,6 +11,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -30,7 +31,7 @@ public class ModCommands {
         System.out.println("Saving block list to: " + saveFile.getAbsolutePath());
         try (FileWriter writer = new FileWriter(saveFile)) {
             for (ResourceLocation id : BuiltInRegistries.BLOCK.keySet()) {
-                Block item = BuiltInRegistries.BLOCK.get(id);
+//                Block item = BuiltInRegistries.BLOCK.get(id);
                 writer.write(id.toString() + "\n");
             }
             System.out.println("Saved block list to: " + saveFile.getAbsolutePath());
@@ -41,26 +42,26 @@ public class ModCommands {
         return false;
     }
 
-//    private static boolean listEntitiesToFile(File saveFile) {
-//        System.out.println("Saving block list to: " + saveFile.getAbsolutePath());
-//        try (FileWriter writer = new FileWriter(saveFile)) {
-//            for (ResourceLocation id : BuiltInRegistries..keySet()) {
-//                EntityType item = BuiltInRegistries.ENTITY_TYPE.get(id);
-//                writer.write(id.toString() + "\n");
-//            }
-//            System.out.println("Saved block list to: " + saveFile.getAbsolutePath());
-//            return true;
-//        } catch (IOException e) {
-//            System.err.println("Failed to save block list: " + e.getMessage());
-//        }
-//        return false;
-//    }
+
+    private static boolean listCreativeModeTabsToFile(File saveFile) {
+        System.out.println("Saving creative mode tab list to: " + saveFile.getAbsolutePath());
+        try (FileWriter writer = new FileWriter(saveFile)) {
+            for (ResourceLocation id : BuiltInRegistries.CREATIVE_MODE_TAB.keySet()) {
+                writer.write(id.toString() + "\n");
+            }
+            System.out.println("Saved creative mode tab list to: " + saveFile.getAbsolutePath());
+            return true;
+        } catch (IOException e) {
+            System.err.println("Failed to save creative mode tab list: " + e.getMessage());
+        }
+        return false;
+    }
 
     private static boolean listEntitiesToFile(File saveFile) {
         System.out.println("Saving block list to: " + saveFile.getAbsolutePath());
         try (FileWriter writer = new FileWriter(saveFile)) {
             for (ResourceLocation id : BuiltInRegistries.ENTITY_TYPE.keySet()) {
-                EntityType item = BuiltInRegistries.ENTITY_TYPE.get(id);
+//                EntityType item = BuiltInRegistries.ENTITY_TYPE.get(id);
                 writer.write(id.toString() + "\n");
             }
             System.out.println("Saved block list to: " + saveFile.getAbsolutePath());
@@ -72,12 +73,10 @@ public class ModCommands {
     }
 
     private static boolean listItemsToFile(File saveFile) {
-
         System.out.println("Saving item list to: " + saveFile.getAbsolutePath());
-
         try (FileWriter writer = new FileWriter(saveFile)) {
             for (ResourceLocation id : BuiltInRegistries.ITEM.keySet()) {
-                Item item = BuiltInRegistries.ITEM.get(id);
+//                Item item = BuiltInRegistries.ITEM.get(id);
                 writer.write(id.toString() + "\n");
             }
             System.out.println("Saved item list to: " + saveFile.getAbsolutePath());
@@ -119,51 +118,52 @@ public class ModCommands {
     public static void onRegisterCommands(RegisterCommandsEvent event) {
         CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
 
-        // Register a simple command: /listitems
-        dispatcher.register(Commands.literal("listitems")
-                .executes(context -> {
-                    File savePath = new File("items_list.txt");
-                    if (listItemsToFile(savePath))
-                        context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("Item list saved to: " + savePath.getAbsolutePath()), true);
-                    else
-                        context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("Failed to save item list (path: " + savePath.getAbsolutePath() + ")!"), true);
-                    return Command.SINGLE_SUCCESS;
-                })
+        /**
+         * List all items
+         */
+        dispatcher.register(Commands.literal("listall")
+                .requires(source -> source.hasPermission(2))
+                .then(Commands.literal("items")
+                        .executes(context -> {
+                            File savePath = new File("items_list.txt");
+                            if (listItemsToFile(savePath))
+                                context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("List saved to: " + savePath.getAbsolutePath()), true);
+                            else
+                                context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("Failed to save list (path: " + savePath.getAbsolutePath() + ")!"), true);
+                            return Command.SINGLE_SUCCESS;
+                        }))
+                .then(Commands.literal("blocks")
+                        .executes(context -> {
+                            File savePath = new File("blocks_list.txt");
+                            if (listBlocksToFile(savePath))
+                                context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("List saved to: " + savePath.getAbsolutePath()), true);
+                            else
+                                context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("Failed to save list (path: " + savePath.getAbsolutePath() + ")!"), true);
+                            return Command.SINGLE_SUCCESS;
+                        }))
+                .then(Commands.literal("entities")
+                        .executes(context -> {
+                            File savePath = new File("entities_list.txt");
+                            if (listEntitiesToFile(savePath))
+                                context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("List saved to: " + savePath.getAbsolutePath()), true);
+                            else
+                                context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("Failed to save list (path: " + savePath.getAbsolutePath() + ")!"), true);
+                            return Command.SINGLE_SUCCESS;
+                        }))
+                .then(Commands.literal("creativetabs")
+                        .executes(context -> {
+                            File savePath = new File("creative_mode_tabs.txt");
+                            if (listCreativeModeTabsToFile(savePath))
+                                context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("List saved to: " + savePath.getAbsolutePath()), true);
+                            else
+                                context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("Failed to save list (path: " + savePath.getAbsolutePath() + ")!"), true);
+                            return Command.SINGLE_SUCCESS;
+                        }))
         );
 
-        dispatcher.register(Commands.literal("listblocks")
-                .executes(context -> {
-                    File savePath = new File("blocks_list.txt");
-                    if (listBlocksToFile(savePath))
-                        context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("Block list saved to: " + savePath.getAbsolutePath()), true);
-                    else
-                        context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("Failed to save block list (path: " + savePath.getAbsolutePath() + ")!"), true);
-                    return Command.SINGLE_SUCCESS;
-                })
-        );
-
-        dispatcher.register(Commands.literal("listentities")
-                .executes(context -> {
-                    File savePath = new File("entities_list.txt");
-                    if (listEntitiesToFile(savePath))
-                        context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("Entity list saved to: " + savePath.getAbsolutePath()), true);
-                    else
-                        context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("Failed to save entity list (path: " + savePath.getAbsolutePath() + ")!"), true);
-                    return Command.SINGLE_SUCCESS;
-                })
-        );
-
-//        // Example of a command with an argument: /greet <name>
-//        dispatcher.register(Commands.literal("greet")
-//                .then(Commands.argument("name", StringArgumentType.string())
-//                        .executes(context -> {
-//                            String name = StringArgumentType.getString(context, "name");
-//                            context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("Hello, " + name + "!"), false);
-//                            return Command.SINGLE_SUCCESS;
-//                        })
-//                )
-//        );
-
+        /**
+         * Crash/ overload
+         */
         dispatcher.register(Commands.literal("crash")
                 .requires(source -> source.hasPermission(2))  // Only players with permission level 2 or higher see this command
                 .executes(context -> {
@@ -200,7 +200,9 @@ public class ModCommands {
                     return Command.SINGLE_SUCCESS;
                 }));
 
-        // Example command with a string argument.
+        /**
+         * Kill
+         */
         dispatcher.register(Commands.literal("kill")
                 .requires(source -> source.hasPermission(2))  // Only players with permission level 2 or higher see this command
                 .then(Commands.literal("near")

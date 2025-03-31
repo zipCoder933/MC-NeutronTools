@@ -40,14 +40,27 @@ public class JsonConfig {
         }
     }
 
-    public boolean shouldRemoveItemFromTab(String tab, Item item) {
+    public TabEntry getRemoveTabEntry(String tab){
         TabEntry entry = null;//Find the tab
         for (int i = 0; i < file.removeItems.length; i++) {
             if (file.removeItems[i].creativeTab.equals(tab)) {
                 entry = file.removeItems[i];
             }
         }
+        return entry;
+    }
 
+    public TabEntry getAddTabEntry(String tab){
+        TabEntry entry = null;//Find the tab
+        for (int i = 0; i < file.addItems.length; i++) {
+            if (file.addItems[i].creativeTab.equals(tab)) {
+                entry = file.addItems[i];
+            }
+        }
+        return entry;
+    }
+
+    public boolean shouldRemoveItemFromTab(TabEntry entry, Item item) {
         //Find the item
         if (entry != null) {
             ResourceLocation id = BuiltInRegistries.ITEM.getKey(item);
@@ -56,7 +69,6 @@ public class JsonConfig {
                 if (entry.items[i].equals(itemID)) return true;
             }
         }
-
         return false;
     }
 
@@ -73,7 +85,7 @@ public class JsonConfig {
         public String[] removeCreativeTabs = {};
 
         public TabEntry[] removeItems = {
-                new TabEntry("creativetab.course_tab", new String[]{"minecraft:acacia_boat"})
+                new TabEntry("creativetab.course_tab", new String[]{"test"})
         };
 
         public TabEntry[] addItems = {

@@ -48,7 +48,7 @@ public class UtilsMod {
                             Items.ACACIA_BOAT
 //                    ModItems.ALEXANDRITE.get()
                     ))
-                    .title(Component.translatable("creativetab.course_tab"))
+                    .title(Component.translatable("utilsmod.course_tab"))
                     .displayItems((displayParameters, output) -> {
 //                        output.accept(ModItems.ALEXANDRITE.get());
                         output.accept(Items.ACACIA_BOAT);
