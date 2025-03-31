@@ -51,6 +51,7 @@ public class JsonConfig {
                 file = GSON.fromJson(reader, JsonFile.class);
             } catch (IOException e) {
                 UtilsMod.LOGGER.error("Couldn't load config file");
+                file = new JsonFile();
             }
 
         } else {//Write to file
@@ -59,8 +60,8 @@ public class JsonConfig {
                 GSON.toJson(file, writer);
             } catch (IOException e) {
                 UtilsMod.LOGGER.error("Couldn't save new config file");
+                file = new JsonFile();
             }
-
         }
     }
 
