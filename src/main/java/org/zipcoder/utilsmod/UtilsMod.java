@@ -27,7 +27,7 @@ public class UtilsMod {
     public static final String MODID = "utilsmod";
     // Directly reference a slf4j logger
     //The logger is a central point for logging
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
 
     public static final JsonConfig CONFIG = new JsonConfig();
 

@@ -5,12 +5,14 @@ import com.google.gson.GsonBuilder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import org.zipcoder.utilsmod.UtilsMod;
 
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.logging.Logger;
 
 public class JsonConfig {
     public final JsonFile file;
@@ -25,7 +27,7 @@ public class JsonConfig {
             try (FileReader reader = new FileReader(filePath.toFile())) {
                 file = GSON.fromJson(reader, JsonFile.class);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                UtilsMod.LOGGER.error("Couldn't load config file");
             }
 
         } else {//Write to file
@@ -34,13 +36,13 @@ public class JsonConfig {
             try (FileWriter writer = new FileWriter(filePath.toFile())) {
                 GSON.toJson(file, writer);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                UtilsMod.LOGGER.error("Couldn't save new config file");
             }
 
         }
     }
 
-    public TabEntry getRemoveTabEntry(String tab){
+    public TabEntry getRemoveTabEntry(String tab) {
         TabEntry entry = null;//Find the tab
         for (int i = 0; i < file.removeItems.length; i++) {
             if (file.removeItems[i].creativeTab.equals(tab)) {
@@ -50,7 +52,7 @@ public class JsonConfig {
         return entry;
     }
 
-    public TabEntry getAddTabEntry(String tab){
+    public TabEntry getAddTabEntry(String tab) {
         TabEntry entry = null;//Find the tab
         for (int i = 0; i < file.addItems.length; i++) {
             if (file.addItems[i].creativeTab.equals(tab)) {
