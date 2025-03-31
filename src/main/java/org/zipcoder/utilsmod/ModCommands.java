@@ -92,7 +92,7 @@ public class ModCommands {
     /**
      * Parses and executes a command string using the given source.
      *
-     * @param source The command source.
+     * @param source  The command source.
      * @param command The command to execute (without a leading '/').
      * @return The number of affected entities or a result code.
      */
