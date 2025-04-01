@@ -52,11 +52,11 @@ public class MoreCreativeTabs {
                     path -> path.getPath().endsWith(".json")
                             && !path.getPath().contains("disabled_tabs")
                             && !path.getPath().contains("ordered_tabs")
-                            && !path.getPath().contains("tab_items"));//Added by me
+                            && !path.getPath().contains("tab_items"));
 
             Map<ResourceLocation, Resource> disabledTabs = manager.listResources("morecreativetabs", path -> path.getPath().contains("disabled_tabs.json"));
             Map<ResourceLocation, Resource> orderedTabs = manager.listResources("morecreativetabs", path -> path.getPath().contains("ordered_tabs.json"));
-            Map<ResourceLocation, Resource> items = manager.listResources("morecreativetabs", path -> path.getPath().contains("tab_items.json"));//Added by me
+            Map<ResourceLocation, Resource> items = manager.listResources("morecreativetabs", path -> path.getPath().contains("tab_items.json"));
 
 
             //Load disabled tabs

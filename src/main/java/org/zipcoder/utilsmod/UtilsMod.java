@@ -2,24 +2,16 @@ package org.zipcoder.utilsmod;
 
 import com.mojang.logging.LogUtils;
 import me.hypherionmc.morecreativetabs.MoreCreativeTabs;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.DeferredRegister;
 import org.slf4j.Logger;
-import org.zipcoder.utilsmod.config.JsonConfig;
-
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(UtilsMod.MODID)
 public class UtilsMod {
@@ -30,7 +22,6 @@ public class UtilsMod {
     //The logger is a central point for logging
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public static final JsonConfig CONFIG = new JsonConfig();
 
     /**
      * Custom creative tab test

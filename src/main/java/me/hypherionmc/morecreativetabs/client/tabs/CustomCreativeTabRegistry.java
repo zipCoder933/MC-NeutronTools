@@ -9,6 +9,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import me.hypherionmc.morecreativetabs.ModConstants;
 import me.hypherionmc.morecreativetabs.client.data.CustomCreativeTabJsonHelper;
 import me.hypherionmc.morecreativetabs.client.data.DisabledTabsJsonHelper;
+import me.hypherionmc.morecreativetabs.client.data.ItemTabJsonHelper;
 import me.hypherionmc.morecreativetabs.client.data.OrderedTabsJsonHelper;
 import org.zipcoder.utilsmod.mixin.moreCreativeTabs.accessor.CreativeModeTabAccessor;
 import org.zipcoder.utilsmod.mixin.moreCreativeTabs.accessor.CreativeModeTabsAccessor;
@@ -33,13 +34,14 @@ import static me.hypherionmc.morecreativetabs.utils.CreativeTabUtils.*;
 public class CustomCreativeTabRegistry {
 
     public static final CustomCreativeTabRegistry INSTANCE = new CustomCreativeTabRegistry();
-    private final Gson GSON = new Gson();
+    protected final Gson GSON = new Gson();
 
     private final List<CreativeModeTab> vanillaTabs = new ArrayList<>();
     private final LinkedHashSet<CreativeModeTab> customTabs = new LinkedHashSet<>();
     private final Set<String> disabledTabs = new HashSet<>();
     private final LinkedHashSet<String> tabOrder = new LinkedHashSet<>();
     private final LinkedList<CreativeModeTab> currentTabs = new LinkedList<>();
+    public final CreativeTabRegistryAddon addon = new CreativeTabRegistryAddon(this);
 
     public LinkedList<CreativeModeTab> getCurrentTabs(){
         return currentTabs;
@@ -166,6 +168,8 @@ public class CustomCreativeTabRegistry {
         reorderTabs();
     }
 
+
+
     public void loadDisabledTabs(Map<ResourceLocation, Resource> entries) {
         entries.forEach((location, resource) -> {
             ModConstants.logger.info("Processing {}", location.toString());
@@ -190,7 +194,7 @@ public class CustomCreativeTabRegistry {
         });
     }
 
-    private void reorderTabs() {
+    protected void reorderTabs() {
         List<CreativeModeTab> oldTabs = new ArrayList<>();
         oldTabs.addAll(vanillaTabs);
         oldTabs.addAll(customTabs);
@@ -267,6 +271,7 @@ public class CustomCreativeTabRegistry {
         tabOrder.clear();
         currentTabs.clear();
         replacedTabs.clear();
+        addon.clear();
     }
 
     public List<CreativeModeTab> sortedTabs() {
