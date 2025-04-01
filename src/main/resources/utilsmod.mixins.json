@@ -8,6 +8,16 @@
     "ItemGroupMixin"
   ],
   "client": [
+    "moreCreativeTabs.accessor.CreativeModeTabAccessor",
+    "moreCreativeTabs.accessor.CreativeModeTabsAccessor",
+    "moreCreativeTabs.CreativeModeTabMixin",
+    "moreCreativeTabs.ForgeCreativeModeInventoryMixin",
+    "moreCreativeTabs.ForgeCreateTabMixin",
+    "moreCreativeTabs.ForgeCreativeTabRegistryMixin",
+    "moreCreativeTabs.ForgeCreativeTabsMixin",
+    "moreCreativeTabs.ForgeCreativeTabsScreenPageMixin",
+    "moreCreativeTabs.ForgeReloadableResourceManagerMixin",
+    "moreCreativeTabs.accessor.ForceCreativeTabAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

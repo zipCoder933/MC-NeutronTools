@@ -1,6 +1,7 @@
 package org.zipcoder.utilsmod;
 
 import com.mojang.logging.LogUtils;
+import me.hypherionmc.morecreativetabs.MoreCreativeTabs;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.api.distmarker.Dist;
@@ -34,8 +35,8 @@ public class UtilsMod {
     /**
      * Custom creative tab test
      */
-    public static final DeferredRegister<CreativeModeTab> TEST_CREATIVE_TABS =
-            DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
+//    public static final DeferredRegister<CreativeModeTab> TEST_CREATIVE_TABS =
+//            DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
 
 //    public static final RegistryObject<CreativeModeTab> COURSE_TAB = CREATIVE_MODE_TABS.register("course_tab",
 //            () -> CreativeModeTab.builder().icon(() -> new ItemStack(
@@ -48,8 +49,6 @@ public class UtilsMod {
 //                        output.accept(Items.OAK_BOAT);
 //                        output.accept(Items.BIRCH_BOAT);
 //                    }).build());
-
-
     public UtilsMod() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
@@ -60,7 +59,10 @@ public class UtilsMod {
         MinecraftForge.EVENT_BUS.register(this);
 
         //Register creative tabs
-        TEST_CREATIVE_TABS.register(modEventBus);
+//        TEST_CREATIVE_TABS.register(modEventBus);
+
+        //Setup MCT mod
+        MoreCreativeTabs mct = new MoreCreativeTabs();
     }
 
 
