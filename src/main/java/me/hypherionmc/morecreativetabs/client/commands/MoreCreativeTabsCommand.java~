@@ -20,9 +20,7 @@ public class MoreCreativeTabsCommand {
 
     @SubscribeEvent
     public static void onRegisterClientCommands(RegisterClientCommandsEvent event) {
-        event.getDispatcher().register(Commands.literal("mct")
-                .requires(source -> source.hasPermission(2)) // Only players with permission level 2 or higher see this command
-                .then(Commands.literal("showTabNames")
+        event.getDispatcher().register(Commands.literal("mct").then(Commands.literal("showTabNames")
                         .then(Commands.argument("enabled", BoolArgumentType.bool()).executes(context -> {
                             boolean enabled = BoolArgumentType.getBool(context, "enabled");
                             CustomCreativeTabRegistry.INSTANCE.setShowTabNames(enabled);
