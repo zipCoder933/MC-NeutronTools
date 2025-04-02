@@ -6,10 +6,14 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTab;
+import org.zipcoder.utilsmod.mixin.moreCreativeTabs.accessor.CreativeModeTabAccessor;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+
+import static me.hypherionmc.morecreativetabs.utils.CreativeTabUtils.getTabKey;
 
 public class ListAllCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
@@ -18,7 +22,6 @@ public class ListAllCommand {
          */
         dispatcher.register(Commands.literal("listall")
                 .requires(source -> source.hasPermission(2))
-
                 .then(Commands.literal("items").executes(context -> {
                     File savePath = new File("items_list.txt");
                     if (listItemsToFile(savePath))
@@ -73,7 +76,11 @@ public class ListAllCommand {
         System.out.println("Saving creative mode tab list to: " + saveFile.getAbsolutePath());
         try (FileWriter writer = new FileWriter(saveFile)) {
             for (ResourceLocation id : BuiltInRegistries.CREATIVE_MODE_TAB.keySet()) {
-                writer.write(id.toString() + "\n");
+
+                CreativeModeTab tab = BuiltInRegistries.CREATIVE_MODE_TAB.get(id);
+                String tabInternalName = getTabKey(((CreativeModeTabAccessor) tab).getInternalDisplayName());
+
+                writer.write(id.toString() + "\t\t" + tabInternalName + "\n");
             }
             System.out.println("Saved creative mode tab list to: " + saveFile.getAbsolutePath());
             return true;

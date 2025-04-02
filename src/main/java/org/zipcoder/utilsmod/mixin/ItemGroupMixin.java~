@@ -45,7 +45,7 @@ public abstract class ItemGroupMixin {
                 self == BuiltInRegistries.CREATIVE_MODE_TAB.get(CreativeModeTabsAccessor.getSearchTab()) ||
                         self == BuiltInRegistries.CREATIVE_MODE_TAB.get(CreativeModeTabsAccessor.getHotbarTab()) ||
                         self == BuiltInRegistries.CREATIVE_MODE_TAB.get(CreativeModeTabsAccessor.getInventoryTab())) {
-            //System.out.println("Skipping");
+            System.out.println("Skipping");
             return;
         }
 
@@ -56,7 +56,7 @@ public abstract class ItemGroupMixin {
 //        assert tabName != null;
 //        String tabID = tabName.toString();
         String tabID = getTabKey(((CreativeModeTabAccessor) self).getInternalDisplayName());
-        //System.out.println("CREATIVE MODE TAB: " + tabID);
+        System.out.println("CREATIVE MODE TAB: " + tabID);
 
         /**
          * Item removal
