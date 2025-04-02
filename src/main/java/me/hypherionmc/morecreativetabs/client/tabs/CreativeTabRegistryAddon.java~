@@ -20,6 +20,9 @@ import java.util.Map;
 
 import static me.hypherionmc.morecreativetabs.utils.CreativeTabUtils.getItemStack;
 
+/**
+ * TODO: There is an issue where some items (like a light item) dont get added to creative tab
+ */
 public class CreativeTabRegistryAddon {
     CustomCreativeTabRegistry registry;
 
@@ -79,7 +82,7 @@ public class CreativeTabRegistryAddon {
                     //Add the items to the final entry
                     for (int i = 0; i < tab.itemsAdd.length; i++) {
                         ItemStack stack = makeStack(tab.itemsAdd[i]);
-                        itemsToAdd.get(tabName).add(stack);
+                        if (!stack.isEmpty()) itemsToAdd.get(tabName).add(stack);
                     }
 
                     for (int i = 0; i < tab.itemsRemove.length; i++) {

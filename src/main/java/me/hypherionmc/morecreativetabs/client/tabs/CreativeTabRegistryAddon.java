@@ -82,7 +82,8 @@ public class CreativeTabRegistryAddon {
                     //Add the items to the final entry
                     for (int i = 0; i < tab.itemsAdd.length; i++) {
                         ItemStack stack = makeStack(tab.itemsAdd[i]);
-                        itemsToAdd.get(tabName).add(stack);
+                        //Only add item stacks that actually exist
+                        if (!stack.isEmpty()) itemsToAdd.get(tabName).add(stack);
                     }
 
                     for (int i = 0; i < tab.itemsRemove.length; i++) {
