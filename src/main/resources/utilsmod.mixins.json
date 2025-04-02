@@ -5,7 +5,7 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "utilsmod.refmap.json",
   "mixins": [
-    "ItemGroupMixin"
+
   ],
   "client": [
     "moreCreativeTabs.accessor.CreativeModeTabAccessor",
@@ -17,7 +17,8 @@
     "moreCreativeTabs.ForgeCreativeTabsMixin",
     "moreCreativeTabs.ForgeCreativeTabsScreenPageMixin",
     "moreCreativeTabs.ForgeReloadableResourceManagerMixin",
-    "moreCreativeTabs.accessor.ForceCreativeTabAccessor"
+    "moreCreativeTabs.accessor.ForceCreativeTabAccessor",
+    "ItemGroupMixin"
   ],
   "injectors": {
     "defaultRequire": 1
