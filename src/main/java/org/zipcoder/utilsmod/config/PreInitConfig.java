@@ -14,7 +14,7 @@ public class PreInitConfig {
         try {
 
             Path path = FMLPaths.CONFIGDIR.get();
-            File configFile = new File(path.toFile(), "cyclic-pre-init.toml");
+            File configFile = new File(path.toFile(), "mp-utils-config.toml");
             try (FileConfig config = FileConfig.builder(configFile, TomlFormat.instance()).build()) {
                 if (configFile.exists()) {
                     loadConfig(config);

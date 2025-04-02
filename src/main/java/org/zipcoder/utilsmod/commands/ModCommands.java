@@ -54,7 +54,7 @@ public class ModCommands {
         /**
          * Crash/ overload
          */
-//        if (UtilsMod.CONFIG.file.crashCommands) {
+        if (UtilsMod.CONFIG.crashCommands) {
             dispatcher.register(Commands.literal("crash")
                     .requires(source -> source.hasPermission(2))  // Only players with permission level 2 or higher see this command
                     .executes(context -> {
@@ -90,7 +90,7 @@ public class ModCommands {
 
                         return Command.SINGLE_SUCCESS;
                     }));
-//        }
+        }
 
         /**
          * Kill

@@ -12,6 +12,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
+import org.zipcoder.utilsmod.config.PreInitConfig;
+
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(UtilsMod.MODID)
 public class UtilsMod {
@@ -22,6 +24,7 @@ public class UtilsMod {
     //The logger is a central point for logging
     public static final Logger LOGGER = LogUtils.getLogger();
 
+    public static final PreInitConfig CONFIG = new PreInitConfig();
 
     /**
      * Custom creative tab test
