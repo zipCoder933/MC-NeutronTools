@@ -1,4 +1,4 @@
-# MC-UtilsMod
+# ⚛️ Neutron Tools
 A basic Utility Mod for modded minecraft (For modpack testing and debugging)
 
 ## Docs
