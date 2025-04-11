@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.zipcoder.utilsmod.UtilsMod;
 import org.zipcoder.utilsmod.mixin.moreCreativeTabs.accessor.CreativeModeTabAccessor;
 import org.zipcoder.utilsmod.mixin.moreCreativeTabs.accessor.CreativeModeTabsAccessor;
 
@@ -56,7 +57,7 @@ public abstract class ItemGroupMixin {
 //        assert tabName != null;
 //        String tabID = tabName.toString();
         String tabID = getTabKey(((CreativeModeTabAccessor) self).getInternalDisplayName());
-        //System.out.println("CREATIVE MODE TAB: " + tabID);
+        UtilsMod.LOGGER.debug("Updating creative tab: " + tabID);
 
         /**
          * Item removal

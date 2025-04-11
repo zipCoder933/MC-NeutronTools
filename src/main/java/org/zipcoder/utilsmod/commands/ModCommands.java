@@ -95,12 +95,12 @@ public class ModCommands {
         /**
          * Kill
          */
-        dispatcher.register(Commands.literal("kill")
-                .requires(source -> source.hasPermission(2))  // Only players with permission level 2 or higher see this command
-                .then(Commands.literal("near")
-                        .executes(context -> {
-                            executeParsedCommand(context.getSource(), "/kill @e[type=!player,distance=..10]");
-                            return Command.SINGLE_SUCCESS;
-                        })));
+//        dispatcher.register(Commands.literal("kill")
+//                .requires(source -> source.hasPermission(2))  // Only players with permission level 2 or higher see this command
+//                .then(Commands.literal("near")
+//                        .executes(context -> {
+//                            executeParsedCommand(context.getSource(), "/kill @e[type=!player,distance=..10]");
+//                            return Command.SINGLE_SUCCESS;
+//                        })));
     }
 }
