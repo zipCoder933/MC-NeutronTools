@@ -14,46 +14,51 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import static me.hypherionmc.morecreativetabs.utils.CreativeTabUtils.getTabKey;
+import static org.zipcoder.utilsmod.commands.ModCommands.NAMESPACE;
 
 public class ListAllCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         /**
          * List all items
          */
-        dispatcher.register(Commands.literal("listall")
+        dispatcher.register(Commands.literal(NAMESPACE)
                 .requires(source -> source.hasPermission(2))
-                .then(Commands.literal("items").executes(context -> {
-                    File savePath = new File("items_list.txt");
-                    if (listItemsToFile(savePath))
-                        context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("List saved to: " + savePath.getAbsolutePath()), true);
-                    else
-                        context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("Failed to save list (path: " + savePath.getAbsolutePath() + ")!"), true);
-                    return Command.SINGLE_SUCCESS;
-                }))
-                .then(Commands.literal("blocks").executes(context -> {
-                    File savePath = new File("blocks_list.txt");
-                    if (listBlocksToFile(savePath))
-                        context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("List saved to: " + savePath.getAbsolutePath()), true);
-                    else
-                        context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("Failed to save list (path: " + savePath.getAbsolutePath() + ")!"), true);
-                    return Command.SINGLE_SUCCESS;
-                }))
-                .then(Commands.literal("entities").executes(context -> {
-                    File savePath = new File("entities_list.txt");
-                    if (listEntitiesToFile(savePath))
-                        context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("List saved to: " + savePath.getAbsolutePath()), true);
-                    else
-                        context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("Failed to save list (path: " + savePath.getAbsolutePath() + ")!"), true);
-                    return Command.SINGLE_SUCCESS;
-                }))
-                .then(Commands.literal("creativetabs").executes(context -> {
-                    File savePath = new File("creative_mode_tabs.txt");
-                    if (listCreativeModeTabsToFile(savePath))
-                        context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("List saved to: " + savePath.getAbsolutePath()), true);
-                    else
-                        context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("Failed to save list (path: " + savePath.getAbsolutePath() + ")!"), true);
-                    return Command.SINGLE_SUCCESS;
-                })));
+                .then(Commands.literal("listall")
+                        .requires(source -> source.hasPermission(2))
+                        .then(Commands.literal("items").executes(context -> {
+                            File savePath = new File("items_list.txt");
+                            if (listItemsToFile(savePath))
+                                context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("List saved to: " + savePath.getAbsolutePath()), true);
+                            else
+                                context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("Failed to save list (path: " + savePath.getAbsolutePath() + ")!"), true);
+                            return Command.SINGLE_SUCCESS;
+                        }))
+                        .then(Commands.literal("blocks").executes(context -> {
+                            File savePath = new File("blocks_list.txt");
+                            if (listBlocksToFile(savePath))
+                                context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("List saved to: " + savePath.getAbsolutePath()), true);
+                            else
+                                context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("Failed to save list (path: " + savePath.getAbsolutePath() + ")!"), true);
+                            return Command.SINGLE_SUCCESS;
+                        }))
+                        .then(Commands.literal("entities").executes(context -> {
+                            File savePath = new File("entities_list.txt");
+                            if (listEntitiesToFile(savePath))
+                                context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("List saved to: " + savePath.getAbsolutePath()), true);
+                            else
+                                context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("Failed to save list (path: " + savePath.getAbsolutePath() + ")!"), true);
+                            return Command.SINGLE_SUCCESS;
+                        }))
+                        .then(Commands.literal("creativetabs").executes(context -> {
+                            File savePath = new File("creative_mode_tabs.txt");
+                            if (listCreativeModeTabsToFile(savePath))
+                                context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("List saved to: " + savePath.getAbsolutePath()), true);
+                            else
+                                context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("Failed to save list (path: " + savePath.getAbsolutePath() + ")!"), true);
+                            return Command.SINGLE_SUCCESS;
+                        })))
+
+        );
     }
 
 

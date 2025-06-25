@@ -6,8 +6,10 @@ import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -19,6 +21,7 @@ import java.util.List;
 @Mod.EventBusSubscriber
 public class ModCommands {
 
+    public final static String NAMESPACE = "neutron";
 
     /**
      * Parses and executes a command string using the given source.
@@ -51,12 +54,34 @@ public class ModCommands {
         CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
         ListAllCommand.register(dispatcher);
 
+        event.getDispatcher().register(Commands.literal(NAMESPACE)
+                .requires(source -> source.hasPermission(2))
+
+
+                .then(Commands.literal("pos") // /neutron pos
+                        .then(Commands.argument("target", EntityArgument.player()) // /neutron pos <target>
+                                .executes(ctx -> {
+                                    ServerPlayer target = EntityArgument.getPlayer(ctx, "target");
+                                    double x = target.getX();
+                                    double y = target.getY();
+                                    double z = target.getZ();
+                                    ctx.getSource().sendSuccess(() -> Component.literal(
+                                            String.format("%s's position → X: %.2f  Y: %.2f  Z: %.2f",
+                                                    target.getName().getString(), x, y, z)), false);
+                                    return Command.SINGLE_SUCCESS;
+                                })
+                        )
+                )
+        );
+
         /**
          * Crash/ overload
          */
         if (UtilsMod.CONFIG.crashCommands) {
-            dispatcher.register(Commands.literal("crash")
-                    .requires(source -> source.hasPermission(2))  // Only players with permission level 2 or higher see this command
+            event.getDispatcher().register(Commands.literal(NAMESPACE)
+                    .requires(source -> source.hasPermission(2))
+
+                    .then(Commands.literal("crash"))
                     .executes(context -> {
 
                         (new Thread(() -> {
@@ -68,16 +93,11 @@ public class ModCommands {
                             System.exit(1);
                             Runtime.getRuntime().exit(1);
                         })).start();
-
                         context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("Crash command executed"), false);
                         return Command.SINGLE_SUCCESS;
                     })
-            );
-
-            dispatcher.register(Commands.literal("overload")
-                    .requires(source -> source.hasPermission(2))  // Only players with permission level 2 or higher see this command
+                    .then(Commands.literal("overload"))
                     .executes(context -> {
-
                         //Create 10 threads
                         for (int i = 0; i < 100; i++) {
                             (new Thread(() -> {
@@ -89,18 +109,9 @@ public class ModCommands {
                         }
 
                         return Command.SINGLE_SUCCESS;
-                    }));
-        }
+                    })
+            );
 
-        /**
-         * Kill
-         */
-//        dispatcher.register(Commands.literal("kill")
-//                .requires(source -> source.hasPermission(2))  // Only players with permission level 2 or higher see this command
-//                .then(Commands.literal("near")
-//                        .executes(context -> {
-//                            executeParsedCommand(context.getSource(), "/kill @e[type=!player,distance=..10]");
-//                            return Command.SINGLE_SUCCESS;
-//                        })));
+        }
     }
 }
