@@ -26,3 +26,4 @@ gradle-app.setting
 *.java~
 *.java~
 *.java~
+*.properties~
