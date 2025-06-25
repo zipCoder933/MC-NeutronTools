@@ -72,6 +72,14 @@ public class ModCommands {
                                 })
                         )
                 )
+                .then(Commands.literal("kill")
+                        .then(Commands.literal("near")
+                                .executes(context -> {
+                                    executeParsedCommand(context.getSource(), "/kill @e[type=!player,distance=..10]");
+                                    return Command.SINGLE_SUCCESS;
+                                })
+                        )
+                )
         );
 
         /**
