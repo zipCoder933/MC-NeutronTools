@@ -23,11 +23,20 @@ import static me.hypherionmc.morecreativetabs.utils.CreativeTabUtils.getTabKey;
 @Mixin(CreativeModeTab.class)
 public abstract class CreativeModeTabMixin {
 
-    @Shadow private Collection<ItemStack> displayItems;
-    @Shadow private Set<ItemStack> displayItemsSearchTab;
-    @Shadow public abstract void rebuildSearchTree();
-    @Shadow @Final private Component displayName;
-    @Shadow public abstract Collection<ItemStack> getDisplayItems();
+    @Shadow
+    private Collection<ItemStack> displayItems;
+    @Shadow
+    private Set<ItemStack> displayItemsSearchTab;
+
+    @Shadow
+    public abstract void rebuildSearchTree();
+
+    @Shadow
+    @Final
+    private Component displayName;
+
+    @Shadow
+    public abstract Collection<ItemStack> getDisplayItems();
 
     @Inject(method = "buildContents", at = @At("HEAD"), cancellable = true)
     private void injectBuildContents(CreativeModeTab.ItemDisplayParameters arg, CallbackInfo ci) {
@@ -86,14 +95,24 @@ public abstract class CreativeModeTabMixin {
         cir.setReturnValue(filterItems(cir.getReturnValue()));
     }
 
+    @Unique
+    private ItemStack customIconItem = null;
+
+    @Unique
+    private boolean checkedForCustomIconItem = false;
+
+    //TODO: Make sure things like this arent happening anywhere else
+    //This method is called EVERY time the icon is requested, so we need to cache it
     @Inject(method = "getIconItem", at = @At("RETURN"), cancellable = true)
     private void injectIcon(CallbackInfoReturnable<ItemStack> cir) {
-        CreativeTabUtils.replacementTab(convertName(getTabKey(this.displayName))).ifPresent(tabData -> {
-            ItemStack stack = CreativeTabUtils.makeTabIcon(tabData.getLeft()).get();
-            if (!stack.isEmpty()) {
-                cir.setReturnValue(stack);
-            }
-        });
+        if (!checkedForCustomIconItem) {//We only want to do this once
+            CreativeTabUtils.replacementTab(convertName(getTabKey(this.displayName))).ifPresent(tabData -> {
+                customIconItem = CreativeTabUtils.makeTabIcon(tabData.getLeft()).get();
+            });
+            checkedForCustomIconItem = true;
+        }
+        if (customIconItem != null && !customIconItem.isEmpty())
+            cir.setReturnValue(customIconItem);
     }
 
     @Unique

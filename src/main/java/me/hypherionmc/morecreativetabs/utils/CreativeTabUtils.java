@@ -11,16 +11,24 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.apache.commons.lang3.tuple.Pair;
+import org.zipcoder.utilsmod.UtilsMod;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
+import java.util.logging.Logger;
 
 public class CreativeTabUtils {
 
+    /**
+     * Provides the item stack for the tab icon, given the json helper object
+     *
+     * @param json the json helper
+     * @return the item stack for the tab icon
+     */
     public static Supplier<ItemStack> makeTabIcon(CustomCreativeTabJsonHelper json) {
-        AtomicReference<ItemStack> icon = new AtomicReference<>(ItemStack.EMPTY);
+        AtomicReference<ItemStack> icon = new AtomicReference<>(ItemStack.EMPTY);//Our default value
         CustomCreativeTabJsonHelper.TabIcon tabIcon = new CustomCreativeTabJsonHelper.TabIcon();
 
         if (json.getTabIcon() != null) {
@@ -32,20 +40,18 @@ public class CreativeTabUtils {
         ItemStack stack = getItemStack(tabIcon.getName());
 
         if (!stack.isEmpty()) {
-            if (finalTabIcon.getNbt() != null) {
-                CompoundTag tag = new CompoundTag();
+            if (finalTabIcon.getNbt() != null && !finalTabIcon.getNbt().isEmpty()) { // Apply the Stack NBT
+                //TODO: Understand why this fails with some of the new item groups
+//                UtilsMod.LOGGER.info("Applying NBT to Item Tag {};\t Tab Name {}", finalTabIcon.getName(), json.getTabName());
                 try {
-                    tag = TagParser.parseTag(finalTabIcon.getNbt());
+                    CompoundTag tag = TagParser.parseTag(finalTabIcon.getNbt());
+                    stack.setTag(tag);
+//                    UtilsMod.LOGGER.info("NBT Data for tab icon {}", stack.getTags().toList());
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    UtilsMod.LOGGER.error("Failed to Process NBT for Item Tag {};\t Tab Name {}", finalTabIcon.getName(), json.getTabName(), e);
                 }
-
-                /* Apply the Stack NBT if needed and apply the icon */
-                stack.setTag(tag);
-                icon.set(stack);
-            } else {
-                icon.set(stack);
             }
+            icon.set(stack);
         }
         return icon::get;
     }
