@@ -1,16 +1,19 @@
 package me.hypherionmc.morecreativetabs;
 
+import me.hypherionmc.morecreativetabs.client.impl.CreativeModeTabMixin_I;
 import me.hypherionmc.morecreativetabs.client.tabs.CustomCreativeTabRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.IExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import org.zipcoder.utilsmod.UtilsMod;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -28,6 +31,9 @@ public class MoreCreativeTabs {
 //        CustomCreativeTabRegistry.INSTANCE.setForge(true);
     }
 
+    /**
+     * This is a client side method
+     */
     public static void reloadResources() {
         if (!hasRun) {
             CustomCreativeTabRegistry.INSTANCE.setVanillaTabs(new ArrayList<>(BuiltInRegistries.CREATIVE_MODE_TAB.stream().toList()));
@@ -77,6 +83,13 @@ public class MoreCreativeTabs {
                 CustomCreativeTabRegistry.INSTANCE.addon.loadItemsForTabs(items);
             }
 
+            //Rebuild cache for all tabs
+            for (CreativeModeTab tab : BuiltInRegistries.CREATIVE_MODE_TAB) {
+                UtilsMod.LOGGER.info("Building cache for '{}'", tab.getDisplayName().getString());
+                // BuiltInRegistries.CREATIVE_MODE_TAB.getKey(tab)
+                CreativeModeTabMixin_I mixinTab = (CreativeModeTabMixin_I) tab;
+                mixinTab.rebuildCache();
+            }
         });
     }
 }
