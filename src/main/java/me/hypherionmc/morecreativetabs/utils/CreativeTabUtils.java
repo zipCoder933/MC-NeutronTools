@@ -57,6 +57,7 @@ public class CreativeTabUtils {
     }
 
     public static ItemStack getItemStack(String jsonItem) {
+        if(jsonItem == null) return ItemStack.EMPTY;
         Optional<Item> itemOptional = BuiltInRegistries.ITEM.getOptional(new ResourceLocation(jsonItem));
         return itemOptional.map(Item::getDefaultInstance).orElse(ItemStack.EMPTY);
     }

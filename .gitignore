@@ -23,7 +23,6 @@ gradle-app.setting
 /run
 /.idea
 /.idea/
-*.java~
-*.java~
-*.java~
+*.*~
 *.properties~
+src/main/java/me/hypherionmc/morecreativetabs/MoreCreativeTabs.java~
