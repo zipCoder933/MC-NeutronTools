@@ -59,6 +59,11 @@ public class CreativeTabUtils {
         return String.format("%s.%s", "morecreativetabs", tabName);
     }
 
+    /**
+     * Returns the ID of the tab from its name
+     * @param component
+     * @return
+     */
     public static String getTabKey(Component component) {
         if (component.getContents() instanceof TranslatableContents contents) {
             return contents.getKey();

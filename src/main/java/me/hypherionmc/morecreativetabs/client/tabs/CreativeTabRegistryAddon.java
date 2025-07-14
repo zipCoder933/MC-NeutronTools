@@ -10,7 +10,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.world.item.ItemStack;
-
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -80,14 +79,35 @@ public class CreativeTabRegistryAddon {
                     }
 
                     //Add the items to the final entry
-                    for (int i = 0; i < tab.itemsAdd.length; i++) {
-                        ItemStack stack = makeStack(tab.itemsAdd[i]);
-                        //Only add item stacks that actually exist
-                        if (!stack.isEmpty()) itemsToAdd.get(tabName).add(stack);
+                    if (tab.itemsAdd != null) {
+                        for (int i = 0; i < tab.itemsAdd.length; i++) {
+                            ItemStack stack = makeStack(tab.itemsAdd[i]);
+                            //Only add item stacks that actually exist
+                            if (!stack.isEmpty()) itemsToAdd.get(tabName).add(stack);
+                        }
                     }
 
-                    for (int i = 0; i < tab.itemsRemove.length; i++) {
-                        itemsToDelete.get(tabName).add(tab.itemsRemove[i]);
+                    //We add all items from other tabs to the final entry
+//                    if (tab.tabsToAdd != null) {
+//                        for (int i = 0; i < tab.tabsToAdd.length; i++) {
+//                            String tabToAddName = tab.tabsToAdd[i];
+//                            String[] tabNamespace = tabToAddName.split(":");
+//                            if (tabNamespace.length > 1) {
+//                                ResourceLocation tabId = new ResourceLocation(tabNamespace[0], tabNamespace[1]); // or your mod id
+//                                System.out.println("Tab to add: " + tabId);
+//                                CreativeModeTab otherTabToAdd = BuiltInRegistries.CREATIVE_MODE_TAB.get(tabId);
+//                                System.out.println("Other tab to add: " + otherTabToAdd);
+//                                if (otherTabToAdd != null)
+//                                    otherTabToAdd.getDisplayItems().forEach(stack -> itemsToAdd.get(tabName).add(stack));
+//                            }
+//                        }
+//                    }
+
+                    //Add the removal items to the final entry
+                    if (tab.itemsRemove != null) {
+                        for (int i = 0; i < tab.itemsRemove.length; i++) {
+                            itemsToDelete.get(tabName).add(tab.itemsRemove[i]);
+                        }
                     }
 
                 });

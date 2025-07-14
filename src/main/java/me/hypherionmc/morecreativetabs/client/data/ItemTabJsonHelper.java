@@ -31,6 +31,9 @@ public class ItemTabJsonHelper {
         @SerializedName("items_to_add")
         public CustomCreativeTabJsonHelper.TabItem[] itemsAdd;
 
+        @SerializedName("tabs_to_add")
+        public String[] tabsToAdd;
+
         @SerializedName("items_to_remove")
         public String[] itemsRemove;
     }
