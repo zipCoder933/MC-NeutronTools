@@ -89,56 +89,43 @@ public abstract class CreativeModeTabMixin implements CreativeModeTabMixin_I {
 
     @Inject(method = "getDisplayItems", at = @At("RETURN"), cancellable = true)
     private void injectDisplayItemsFilter(CallbackInfoReturnable<Collection<ItemStack>> cir) {
-        initCache();
-        cir.setReturnValue(filteredDisplayItems);
-//        cir.setReturnValue(filterItems(cir.getReturnValue()));
+        if (cached_FilteredDisplayItems == null && !cir.getReturnValue().isEmpty()) { //Cache the display items
+            LOGGER.info("tab {}: \tCaching display items...", this.displayName.getString());
+            cached_FilteredDisplayItems = filterItems(cir.getReturnValue());
+        }
 
+        if (cached_FilteredDisplayItems != null) cir.setReturnValue(cached_FilteredDisplayItems);
+//        cir.setReturnValue(filterItems(cir.getReturnValue()));
     }
 
     @Inject(method = "getSearchTabDisplayItems", at = @At("RETURN"), cancellable = true)
     private void injectSearchItemsFilter(CallbackInfoReturnable<Collection<ItemStack>> cir) {
-        initCache();
-        cir.setReturnValue(filteredSearchTab);
+        if (cached_filteredSearchTab == null && !cir.getReturnValue().isEmpty()) { //Cache the search tab
+            LOGGER.info("tab {}: \tCaching search tab display items...", this.displayName.getString());
+            cached_filteredSearchTab = filterItems(cir.getReturnValue());
+        }
+
+        if (cached_filteredSearchTab != null) cir.setReturnValue(cached_filteredSearchTab);
 //        cir.setReturnValue(filterItems(cir.getReturnValue()));
     }
 
     //Cached values
     @Unique
-    private ItemStack customIconItem = null;
+    private ItemStack cached_TabIcon = null;
     @Unique
-    private Collection<ItemStack> filteredDisplayItems;
+    private boolean isCachedCustomIcon = false;
+
     @Unique
-    private Collection<ItemStack> filteredSearchTab;
+    private Collection<ItemStack> cached_FilteredDisplayItems = null;
     @Unique
-    private boolean builtCache = false;
+    private Collection<ItemStack> cached_filteredSearchTab = null;
 
     @Override
     public void rebuildCache() {
-        builtCache = false;
-        initCache();
-    }
-
-    @Unique
-    private void initCache() {
-        if (!builtCache) {//We only want to do this once
-            String tabKey = getTabKey(this.displayName);
-
-            //Set the tab icon
-            CreativeTabUtils.replacementTab(convertName(tabKey)).ifPresent(tabData -> {
-                LOGGER.info("tab {}: \tCaching tab icon...", this.displayName.getString());
-                customIconItem = CreativeTabUtils.makeTabIcon(tabData.getLeft()).get();
-            });
-
-            //Set the display items
-            LOGGER.info("tab {}: \tCaching display items...", this.displayName.getString());
-            filteredDisplayItems = filterItems(displayItems);
-
-            //Set the search tab display items
-            LOGGER.info("tab {}: \tCaching search tab display items...", this.displayName.getString());
-            filteredSearchTab = filterItems(displayItemsSearchTab);
-
-            builtCache = true;
-        }
+        isCachedCustomIcon = false;
+        cached_TabIcon = null;
+        cached_FilteredDisplayItems = null;
+        cached_filteredSearchTab = null;
     }
 
 
@@ -146,9 +133,18 @@ public abstract class CreativeModeTabMixin implements CreativeModeTabMixin_I {
     //This method is called EVERY time the icon is requested, so we need to cache it
     @Inject(method = "getIconItem", at = @At("RETURN"), cancellable = true)
     private void injectIcon(CallbackInfoReturnable<ItemStack> cir) {
-        initCache();
-        if (customIconItem != null && !customIconItem.isEmpty())
-            cir.setReturnValue(customIconItem);
+        if (!isCachedCustomIcon) {
+            //Set the tab icon
+            String tabKey = getTabKey(this.displayName);
+            CreativeTabUtils.replacementTab(convertName(tabKey)).ifPresent(tabData -> {
+                LOGGER.info("tab {}: \tCaching tab icon...", this.displayName.getString());
+                cached_TabIcon = CreativeTabUtils.makeTabIcon(tabData.getLeft()).get();
+            });
+            isCachedCustomIcon = true;
+        }
+
+        if (cached_TabIcon != null && !cached_TabIcon.isEmpty())
+            cir.setReturnValue(cached_TabIcon);
     }
 
     @Unique

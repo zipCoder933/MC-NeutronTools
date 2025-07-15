@@ -11,6 +11,8 @@ import net.minecraftforge.client.event.RegisterClientCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import static org.zipcoder.utilsmod.commands.ModCommands.NAMESPACE;
+
 /**
  * @author HypherionSA
  * Register Client Side Commands
@@ -20,20 +22,22 @@ public class MoreCreativeTabsCommand {
 
     @SubscribeEvent
     public static void onRegisterClientCommands(RegisterClientCommandsEvent event) {
-        event.getDispatcher().register(Commands.literal("mct")
-                .requires(source -> source.hasPermission(2)) // Only players with permission level 2 or higher see this command
-                .then(Commands.literal("showTabNames")
-                        .then(Commands.argument("enabled", BoolArgumentType.bool()).executes(context -> {
-                            boolean enabled = BoolArgumentType.getBool(context, "enabled");
-                            CustomCreativeTabRegistry.INSTANCE.setShowTabNames(enabled);
-                            context.getSource().sendSuccess(() -> enabled ? Component.literal("Showing tab registry names") : Component.literal("Showing tab names"), true);
+        event.getDispatcher().register(Commands.literal(NAMESPACE)
+                .requires(source -> source.hasPermission(2))
+                .then(Commands.literal("creativetabs")
+                        .requires(source -> source.hasPermission(2)) // Only players with permission level 2 or higher see this command
+                        .then(Commands.literal("showTabNames")
+                                .then(Commands.argument("enabled", BoolArgumentType.bool()).executes(context -> {
+                                    boolean enabled = BoolArgumentType.getBool(context, "enabled");
+                                    CustomCreativeTabRegistry.INSTANCE.setShowTabNames(enabled);
+                                    context.getSource().sendSuccess(() -> enabled ? Component.literal("Showing tab registry names") : Component.literal("Showing tab names"), true);
+                                    return 1;
+                                }))).then(Commands.literal("reloadTabs").executes(context -> {
+                            MoreCreativeTabs.reloadResources();
+                            context.getSource().sendSuccess(() -> Component.literal("Reloaded Custom Tabs"), true);
                             return 1;
-                        }))).then(Commands.literal("reloadTabs").executes(context -> {
-                    MoreCreativeTabs.reloadResources();
-                    context.getSource().sendSuccess(() -> Component.literal("Reloaded Custom Tabs"), true);
-                    return 1;
-                }))
-        );
+                        }))
+                ));
     }
 
 }
