@@ -23,7 +23,6 @@ public class MoreCreativeTabsCommand {
     @SubscribeEvent
     public static void onRegisterClientCommands(RegisterClientCommandsEvent event) {
         event.getDispatcher().register(Commands.literal(NAMESPACE)
-                .requires(source -> source.hasPermission(2))
                 .then(Commands.literal("creativetabs")
                         .requires(source -> source.hasPermission(2)) // Only players with permission level 2 or higher see this command
                         .then(Commands.literal("showTabNames")
