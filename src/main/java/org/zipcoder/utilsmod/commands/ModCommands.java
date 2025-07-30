@@ -3,6 +3,7 @@ package org.zipcoder.utilsmod.commands;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.ParseResults;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -14,6 +15,7 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.zipcoder.utilsmod.UtilsMod;
+import org.zipcoder.utilsmod.config.PreInitConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,53 @@ import java.util.List;
 public class ModCommands {
 
     public final static String NAMESPACE = "neutron";
+
+    public static int executeParsedCommandOP(CommandSourceStack originalSource, String command, boolean redirectOutput) {
+        MinecraftServer server = originalSource.getServer();
+        var dispatcher = server.getCommands().getDispatcher();
+
+        // Remove leading slash
+        if (command.startsWith("/")) {
+            command = command.substring(1);
+        }
+
+
+        try {
+            CommandSourceStack serverSource;
+
+            if (redirectOutput) {
+                serverSource = new CommandSourceStack(
+                        originalSource.getPlayer(), // entity
+                        originalSource.getPlayer().position(), // position
+                        originalSource.getPlayer().getRotationVector(), // rotation
+
+                        server.getLevel(originalSource.getPlayer().level().dimension()).getServer()
+                                .getLevel(originalSource.getPlayer().level().dimension()), // server level access
+
+                        4, // permission level (OP)
+                        originalSource.getPlayer().getName().getString(), // name
+                        originalSource.getPlayer().getDisplayName(), // display name
+                        server, // server
+                        originalSource.getPlayer() // entity again
+                ).withPermission(4)
+                        .withSuppressedOutput(); // ensure messages show
+            } else {
+                serverSource = server.createCommandSourceStack()
+                        .withPermission(4) // Full OP level
+                        .withSuppressedOutput();
+            }
+
+            ParseResults<CommandSourceStack> parseResults = dispatcher.parse(command, serverSource);
+            return dispatcher.execute(parseResults);
+        } catch (CommandSyntaxException e) {
+            originalSource.sendFailure(Component.literal("Error executing command: " + e.getMessage()));
+            return 0;
+        } catch (Exception e) {
+            originalSource.sendFailure(Component.literal("Error executing command: " + e.getMessage()));
+            return 0;
+        }
+    }
+
 
     /**
      * Parses and executes a command string using the given source.
@@ -55,10 +104,7 @@ public class ModCommands {
         ListAllCommand.register(dispatcher);
 
         event.getDispatcher().register(Commands.literal(NAMESPACE)
-                .requires(source -> source.hasPermission(2))
-
-
-                .then(Commands.literal("pos") // /neutron pos
+                .then(Commands.literal("pos").requires(source -> source.hasPermission(2))
                         .then(Commands.argument("target", EntityArgument.player()) // /neutron pos <target>
                                 .executes(ctx -> {
                                     ServerPlayer target = EntityArgument.getPlayer(ctx, "target");
@@ -72,7 +118,7 @@ public class ModCommands {
                                 })
                         )
                 )
-                .then(Commands.literal("kill")
+                .then(Commands.literal("kill").requires(source -> source.hasPermission(2))
                         .then(Commands.literal("near")
                                 .executes(context -> {
                                     executeParsedCommand(context.getSource(), "/kill @e[type=!player,distance=..10]");
@@ -81,6 +127,40 @@ public class ModCommands {
                         )
                 )
         );
+
+        for (PreInitConfig.ExposedOPCommand op : UtilsMod.CONFIG.exposeOPCommands) {
+            if (op == null) continue;
+
+            // Create the keyword literal first
+            var keywordLiteral = Commands.literal(op.keyword);
+
+            // If arguments are allowed, add the argument node to keywordLiteral
+            if (op.allowArguments) {
+                keywordLiteral = keywordLiteral.then(
+                        Commands.argument("args", StringArgumentType.greedyString())
+                                .executes(context -> {
+                                    String extraArgs = StringArgumentType.getString(context, "args");
+                                    String fullCommand = op.command + " " + extraArgs;
+                                    return executeParsedCommandOP(context.getSource(), fullCommand, false);
+                                })
+                );
+            }
+
+            // Add execute without arguments to keywordLiteral
+            keywordLiteral = keywordLiteral.executes(context -> {
+                return executeParsedCommandOP(context.getSource(), op.command, false);
+            });
+
+            // Build the full command tree with namespace and "exposed"
+            var literal = Commands.literal(NAMESPACE)
+                    .then(Commands.literal("exposed")
+                            .then(keywordLiteral)
+                    );
+
+            dispatcher.register(literal);
+        }
+
+
 
         /**
          * Crash/ overload
