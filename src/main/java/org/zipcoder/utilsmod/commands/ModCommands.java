@@ -22,7 +22,7 @@ import org.zipcoder.utilsmod.config.PreInitConfig;
 import java.util.ArrayList;
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid = ModConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.DEDICATED_SERVER)
+@Mod.EventBusSubscriber(modid = ModConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ModCommands {
 
     public final static String NAMESPACE = "neutron";
@@ -128,6 +128,22 @@ public class ModCommands {
                                 })
                         )
                 )
+                .then(Commands.literal("listAddedCommands").requires(source -> source.hasPermission(2))
+                        .executes(context -> {
+                            StringBuilder sb = new StringBuilder();
+                            if (UtilsMod.CONFIG.exposeOPCommands.length == 0) {
+                                sb.append("No custom commands");
+                            } else {
+                                for (PreInitConfig.ExposedOPCommand op : UtilsMod.CONFIG.exposeOPCommands) {
+                                    if (op == null) continue;
+                                    sb.append("Keyword: \"").append(op.keyword).append("\" Executes: ")
+                                            .append(op.command).append(" (allow arguments: ").append(op.allowArguments).append(")\n");
+                                }
+                            }
+                            context.getSource().sendSuccess(() -> Component.literal(sb.toString()), false);
+                            return Command.SINGLE_SUCCESS;
+                        })
+                )
         );
 
         for (PreInitConfig.ExposedOPCommand op : UtilsMod.CONFIG.exposeOPCommands) {
@@ -155,13 +171,12 @@ public class ModCommands {
 
             // Build the full command tree with namespace and "exposed"
             var literal = Commands.literal(NAMESPACE)
-                    .then(Commands.literal("exposed")
+                    .then(Commands.literal("commands")
                             .then(keywordLiteral)
                     );
 
             dispatcher.register(literal);
         }
-
 
 
         /**
