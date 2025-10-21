@@ -20,19 +20,14 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.phys.Vec2;
-import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.zipcoder.utilsmod.UtilsMod;
-import org.zipcoder.utilsmod.config.PreInitConfig;
+import org.zipcoder.utilsmod.NeutronTools;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber(modid = ModConstants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ModCommands {
@@ -220,7 +215,7 @@ public class ModCommands {
         /**
          * Crash/ overload
          */
-        if (UtilsMod.CONFIG.crashCommands) {
+        if (NeutronTools.CONFIG.crashCommands) {
             event.getDispatcher().register(Commands.literal(NAMESPACE)
                     .requires(source -> source.hasPermission(2))
 

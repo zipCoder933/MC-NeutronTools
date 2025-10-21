@@ -15,15 +15,10 @@ import org.slf4j.Logger;
 import org.zipcoder.utilsmod.config.PreInitConfig;
 
 // The value here should match an entry in the META-INF/mods.toml file
-@Mod(UtilsMod.MODID)
-public class UtilsMod {
-
-    // Define mod id in a common place for everything to reference
+@Mod(NeutronTools.MODID)
+public class NeutronTools {
     public static final String MODID = "utilsmod";
-    // Directly reference a slf4j logger
-    //The logger is a central point for logging
     public static final Logger LOGGER = LogUtils.getLogger();
-
     public static final PreInitConfig CONFIG = new PreInitConfig();
 
     /**
@@ -43,7 +38,7 @@ public class UtilsMod {
 //                        output.accept(Items.OAK_BOAT);
 //                        output.accept(Items.BIRCH_BOAT);
 //                    }).build());
-    public UtilsMod() {
+    public NeutronTools() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         // Register the commonSetup method for modloading

@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.*;
 
 import static me.hypherionmc.morecreativetabs.utils.CreativeTabUtils.getTabKey;
-import static org.zipcoder.utilsmod.UtilsMod.LOGGER;
+import static org.zipcoder.utilsmod.NeutronTools.LOGGER;
 
 @Mixin(CreativeModeTab.class)
 public abstract class CreativeModeTabMixin implements CreativeModeTabMixin_I {

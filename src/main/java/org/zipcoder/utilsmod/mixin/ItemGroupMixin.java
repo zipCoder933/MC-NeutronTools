@@ -3,7 +3,6 @@ package org.zipcoder.utilsmod.mixin;
 import me.hypherionmc.morecreativetabs.client.tabs.CustomCreativeTabRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackLinkedSet;
@@ -13,7 +12,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.zipcoder.utilsmod.UtilsMod;
+import org.zipcoder.utilsmod.NeutronTools;
 import org.zipcoder.utilsmod.mixin.moreCreativeTabs.accessor.CreativeModeTabAccessor;
 import org.zipcoder.utilsmod.mixin.moreCreativeTabs.accessor.CreativeModeTabsAccessor;
 
@@ -57,7 +56,7 @@ public abstract class ItemGroupMixin {
 //        assert tabName != null;
 //        String tabID = tabName.toString();
         String tabID = getTabKey(((CreativeModeTabAccessor) self).getInternalDisplayName());
-        UtilsMod.LOGGER.debug("Updating creative tab: " + tabID);
+        NeutronTools.LOGGER.debug("Updating creative tab: " + tabID);
 
         /**
          * Item removal

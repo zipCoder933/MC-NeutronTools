@@ -12,8 +12,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.IExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import org.zipcoder.utilsmod.UtilsMod;
+import org.zipcoder.utilsmod.NeutronTools;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -85,7 +84,7 @@ public class MoreCreativeTabs {
 
             //Rebuild cache for all tabs
             for (CreativeModeTab tab : BuiltInRegistries.CREATIVE_MODE_TAB) {
-                UtilsMod.LOGGER.info("Building cache for '{}'", tab.getDisplayName().getString());
+                NeutronTools.LOGGER.info("Building cache for '{}'", tab.getDisplayName().getString());
                 // BuiltInRegistries.CREATIVE_MODE_TAB.getKey(tab)
                 CreativeModeTabMixin_I mixinTab = (CreativeModeTabMixin_I) tab;
                 mixinTab.rebuildCache();

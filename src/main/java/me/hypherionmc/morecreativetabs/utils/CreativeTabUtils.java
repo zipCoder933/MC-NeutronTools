@@ -11,8 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.apache.commons.lang3.tuple.Pair;
-import org.zipcoder.utilsmod.UtilsMod;
-import net.minecraft.world.item.Item;
+import org.zipcoder.utilsmod.NeutronTools;
 import net.minecraft.world.item.Items;
 
 
@@ -20,7 +19,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
-import java.util.logging.Logger;
 
 public class CreativeTabUtils {
 
@@ -51,7 +49,7 @@ public class CreativeTabUtils {
                     stack.setTag(tag);
 //                    UtilsMod.LOGGER.info("NBT Data for tab icon {}", stack.getTags().toList());
                 } catch (Exception e) {
-                    UtilsMod.LOGGER.error("Failed to Process NBT for Item Tag {};\t Tab Name {}", finalTabIcon.getName(), json.getTabName(), e);
+                    NeutronTools.LOGGER.error("Failed to Process NBT for Item Tag {};\t Tab Name {}", finalTabIcon.getName(), json.getTabName(), e);
                 }
             }
             icon.set(stack);

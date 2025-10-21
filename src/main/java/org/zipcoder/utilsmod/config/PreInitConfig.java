@@ -1,18 +1,13 @@
 package org.zipcoder.utilsmod.config;
 
-import com.electronwill.nightconfig.core.Config;
 import com.electronwill.nightconfig.core.file.FileConfig;
 import com.electronwill.nightconfig.toml.TomlFormat;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import static org.zipcoder.utilsmod.UtilsMod.LOGGER;
+import static org.zipcoder.utilsmod.NeutronTools.LOGGER;
 
 public class PreInitConfig {
     public PreInitConfig() {

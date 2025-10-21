@@ -18,7 +18,8 @@
     "moreCreativeTabs.ForgeCreativeTabsScreenPageMixin",
     "moreCreativeTabs.ForgeReloadableResourceManagerMixin",
     "moreCreativeTabs.accessor.ForceCreativeTabAccessor",
-    "ItemGroupMixin"
+    "ItemGroupMixin",
+    "ItemDisplayBuilderMixin"
   ],
   "injectors": {
     "defaultRequire": 1
