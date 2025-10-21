@@ -12,6 +12,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.apache.commons.lang3.tuple.Pair;
 import org.zipcoder.utilsmod.UtilsMod;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -53,7 +56,15 @@ public class CreativeTabUtils {
             }
             icon.set(stack);
         }
+        icon.set(fixIcon(icon.get()));
         return icon::get;
+    }
+
+    public static ItemStack fixIcon(ItemStack icon) {
+        if (icon.isEmpty()) icon = new ItemStack(Items.GRASS_BLOCK, 1);
+        icon.setCount(1);
+        System.out.println("ICON: " + icon.toString());
+        return icon;
     }
 
     public static ItemStack getItemStack(String jsonItem) {
