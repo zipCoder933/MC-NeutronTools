@@ -19,7 +19,8 @@
     "moreCreativeTabs.ForgeReloadableResourceManagerMixin",
     "moreCreativeTabs.accessor.ForceCreativeTabAccessor",
     "ItemGroupMixin",
-    "ItemDisplayBuilderMixin"
+    "ItemDisplayBuilderMixin",
+    "FastPortalsForgeMixin"
   ],
   "injectors": {
     "defaultRequire": 1
