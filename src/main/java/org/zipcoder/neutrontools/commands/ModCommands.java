@@ -1,4 +1,4 @@
-package org.zipcoder.utilsmod.commands;
+package org.zipcoder.neutrontools.commands;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
@@ -23,7 +23,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.zipcoder.utilsmod.NeutronTools;
+import org.zipcoder.neutrontools.NeutronTools;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -112,114 +112,64 @@ public class ModCommands {
         CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
         ListAllCommand.register(dispatcher);
 
-        event.getDispatcher().register(
-                Commands.literal(NAMESPACE)
-                        .then(Commands.literal("pos").requires(source -> source.hasPermission(2))
-                                .then(Commands.argument("target", EntityArgument.player()) // /neutron pos <target>
-                                        .executes(ctx -> {
-                                            ServerPlayer target = EntityArgument.getPlayer(ctx, "target");
-                                            double x = target.getX();
-                                            double y = target.getY();
-                                            double z = target.getZ();
-                                            ctx.getSource().sendSuccess(() -> Component.literal(
-                                                    String.format("%s's position → X: %.2f  Y: %.2f  Z: %.2f",
-                                                            target.getName().getString(), x, y, z)), false);
-                                            return Command.SINGLE_SUCCESS;
-                                        })
-                                )
-                        )
-                        .then(Commands.literal("kill").requires(source -> source.hasPermission(2))
-                                .then(Commands.literal("near")
-                                        .executes(context -> {
-                                            executeParsedCommand(context.getSource(), "/kill @e[type=!player,distance=..10]");
-                                            return Command.SINGLE_SUCCESS;
-                                        })
-                                )
-                        )
-                        .then(Commands.literal("ping")
-                                .executes(ctx -> {
-                                    MinecraftServer server = ctx.getSource().getServer();
-                                    Collection<ServerPlayer> players = server.getPlayerList().getPlayers();
-                                    for (ServerPlayer player : players) {
-                                        ping(server, player, ctx.getSource().getPlayer());
-                                    }
-                                    return 1;//1=success
+        event.getDispatcher().register(Commands.literal(NAMESPACE)
+                .then(Commands.literal("kill")
+                        .requires(source -> source.hasPermission(2))
+                        .then(Commands.literal("near")
+                                .executes(context -> {
+                                    executeParsedCommand(context.getSource(), "/kill @e[type=!player,distance=..10]");
+                                    return Command.SINGLE_SUCCESS;
                                 })
-                                .then(RequiredArgumentBuilder.<CommandSourceStack, String>argument("username", StringArgumentType.word())
-                                        .suggests(usernameSuggestions())
-                                        .executes(ctx -> {
-                                            String targetName = StringArgumentType.getString(ctx, "username");
-                                            MinecraftServer server = ctx.getSource().getServer();
-                                            if (!targetName.isEmpty()) {
-                                                ServerPlayer asking = server.getPlayerList().getPlayerByName(targetName);
-                                                if (asking != null) {
-                                                    ping(server, asking, ctx.getSource().getPlayer());
-                                                    return 1;
-                                                }
-                                            }
-                                            return 0;
-                                        })
-                                ))
+                        )
+                )
+                .then(Commands.literal("locate")
+                        .requires(source -> source.hasPermission(2))
+                        .then(Commands.argument("player", EntityArgument.player())
+
+                                .executes(ctx -> {
+                                    ServerPlayer player = EntityArgument.getPlayer(ctx, "player");
+                                    double x = player.getX();
+                                    double y = player.getY();
+                                    double z = player.getZ();
+                                    ctx.getSource().sendSuccess(() -> Component.literal(
+                                            String.format("%s's position → X: %.2f  Y: %.2f  Z: %.2f",
+                                                    player.getName().getString(), x, y, z)), false);
+                                    return Command.SINGLE_SUCCESS;
+                                })
+                        ))
+                .then(Commands.literal("ping")
+                        .executes(ctx -> {
+                            MinecraftServer server = ctx.getSource().getServer();
+                            Collection<ServerPlayer> players = server.getPlayerList().getPlayers();
+                            for (ServerPlayer player : players) {
+                                ping(server, player, ctx.getSource().getPlayer());
+                            }
+                            return 1;//1=success
+                        })
+                        .then(RequiredArgumentBuilder.<CommandSourceStack, String>argument("username", StringArgumentType.word())
+                                .suggests(usernameSuggestions())
+                                .executes(ctx -> {
+                                    String targetName = StringArgumentType.getString(ctx, "username");
+                                    MinecraftServer server = ctx.getSource().getServer();
+                                    if (!targetName.isEmpty()) {
+                                        ServerPlayer asking = server.getPlayerList().getPlayerByName(targetName);
+                                        if (asking != null) {
+                                            ping(server, asking, ctx.getSource().getPlayer());
+                                            return 1;
+                                        }
+                                    }
+                                    return 0;
+                                })
+                        ))
         );
-
-//                .then(Commands.literal("listAddedCommands").requires(source -> source.hasPermission(2))
-//                        .executes(context -> {
-//                            StringBuilder sb = new StringBuilder();
-//                            if (UtilsMod.CONFIG.exposeOPCommands.length == 0) {
-//                                sb.append("No custom commands");
-//                            } else {
-//                                for (PreInitConfig.ExposedOPCommand op : UtilsMod.CONFIG.exposeOPCommands) {
-//                                    if (op == null) continue;
-//                                    sb.append("Keyword: \"").append(op.keyword).append("\" Executes: ")
-//                                            .append(op.command).append(" (allow arguments: ").append(op.allowArguments).append(")\n");
-//                                }
-//                            }
-//                            context.getSource().sendSuccess(() -> Component.literal(sb.toString()), false);
-//                            return Command.SINGLE_SUCCESS;
-//                        })
-//                )
-
-//        for (PreInitConfig.ExposedOPCommand op : UtilsMod.CONFIG.exposeOPCommands) {
-//            if (op == null) continue;
-//
-//            // Create the keyword literal first
-//            var keywordLiteral = Commands.literal(op.keyword);
-//
-//            // If arguments are allowed, add the argument node to keywordLiteral
-//            if (op.allowArguments) {
-//                keywordLiteral = keywordLiteral.then(
-//                        Commands.argument("args", StringArgumentType.greedyString())
-//                                .executes(context -> {
-//                                    String extraArgs = StringArgumentType.getString(context, "args");
-//                                    String fullCommand = op.command + " " + extraArgs;
-//                                    return executeParsedCommandOP(context.getSource(), fullCommand, false);
-//                                })
-//                );
-//            }
-//
-//            // Add execute without arguments to keywordLiteral
-//            keywordLiteral = keywordLiteral.executes(context -> {
-//                return executeParsedCommandOP(context.getSource(), op.command, false);
-//            });
-//
-//            // Build the full command tree with namespace and "exposed"
-//            var literal = Commands.literal(NAMESPACE)
-//                    .then(Commands.literal("commands")
-//                            .then(keywordLiteral)
-//                    );
-//
-//            dispatcher.register(literal);
-//        }
-
 
         /**
          * Crash/ overload
          */
         if (NeutronTools.CONFIG.crashCommands) {
             event.getDispatcher().register(Commands.literal(NAMESPACE)
-                    .requires(source -> source.hasPermission(2))
-
                     .then(Commands.literal("crash"))
+                    .requires(source -> source.hasPermission(2))
                     .executes(context -> {
 
                         (new Thread(() -> {
@@ -235,6 +185,7 @@ public class ModCommands {
                         return Command.SINGLE_SUCCESS;
                     })
                     .then(Commands.literal("overload"))
+                    .requires(source -> source.hasPermission(2))
                     .executes(context -> {
                         //Create 10 threads
                         for (int i = 0; i < 100; i++) {
@@ -249,7 +200,6 @@ public class ModCommands {
                         return Command.SINGLE_SUCCESS;
                     })
             );
-
         }
     }
 

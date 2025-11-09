@@ -1,4 +1,4 @@
-package org.zipcoder.utilsmod.mixin.moreCreativeTabs;
+package org.zipcoder.neutrontools.mixin.moreCreativeTabs;
 
 import me.hypherionmc.morecreativetabs.client.data.CustomCreativeTabJsonHelper;
 import me.hypherionmc.morecreativetabs.client.impl.CreativeModeTabMixin_I;
@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.*;
 
 import static me.hypherionmc.morecreativetabs.utils.CreativeTabUtils.getTabKey;
-import static org.zipcoder.utilsmod.NeutronTools.LOGGER;
+import static org.zipcoder.neutrontools.NeutronTools.LOGGER;
 
 @Mixin(CreativeModeTab.class)
 public abstract class CreativeModeTabMixin implements CreativeModeTabMixin_I {

@@ -11,7 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.apache.commons.lang3.tuple.Pair;
-import org.zipcoder.utilsmod.NeutronTools;
+import org.zipcoder.neutrontools.NeutronTools;
 import net.minecraft.world.item.Items;
 
 

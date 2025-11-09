@@ -1,8 +1,8 @@
-package org.zipcoder.utilsmod.mixin.moreCreativeTabs;
+package org.zipcoder.neutrontools.mixin.moreCreativeTabs;
 
 import me.hypherionmc.morecreativetabs.client.impl.ForgeTabData;
 import me.hypherionmc.morecreativetabs.client.tabs.CustomCreativeTabRegistry;
-import org.zipcoder.utilsmod.mixin.moreCreativeTabs.accessor.ForceCreativeTabAccessor;
+import org.zipcoder.neutrontools.mixin.moreCreativeTabs.accessor.ForceCreativeTabAccessor;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.flag.FeatureFlagSet;

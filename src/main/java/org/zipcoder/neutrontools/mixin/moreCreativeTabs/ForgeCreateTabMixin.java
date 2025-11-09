@@ -1,4 +1,4 @@
-package org.zipcoder.utilsmod.mixin.moreCreativeTabs;
+package org.zipcoder.neutrontools.mixin.moreCreativeTabs;
 
 import me.hypherionmc.morecreativetabs.client.impl.ForgeTabData;
 import net.minecraft.world.item.CreativeModeTab;

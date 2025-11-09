@@ -2,7 +2,7 @@ package me.hypherionmc.morecreativetabs;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.zipcoder.utilsmod.NeutronTools;
+import org.zipcoder.neutrontools.NeutronTools;
 
 /**
  * @author HypherionSA

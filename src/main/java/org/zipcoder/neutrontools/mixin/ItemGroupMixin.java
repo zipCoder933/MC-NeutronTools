@@ -1,4 +1,4 @@
-package org.zipcoder.utilsmod.mixin;
+package org.zipcoder.neutrontools.mixin;
 
 import me.hypherionmc.morecreativetabs.client.tabs.CustomCreativeTabRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -12,9 +12,9 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.zipcoder.utilsmod.NeutronTools;
-import org.zipcoder.utilsmod.mixin.moreCreativeTabs.accessor.CreativeModeTabAccessor;
-import org.zipcoder.utilsmod.mixin.moreCreativeTabs.accessor.CreativeModeTabsAccessor;
+import org.zipcoder.neutrontools.NeutronTools;
+import org.zipcoder.neutrontools.mixin.moreCreativeTabs.accessor.CreativeModeTabAccessor;
+import org.zipcoder.neutrontools.mixin.moreCreativeTabs.accessor.CreativeModeTabsAccessor;
 
 import java.util.Collection;
 import java.util.List;

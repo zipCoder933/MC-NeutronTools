@@ -1,4 +1,4 @@
-package org.zipcoder.utilsmod.mixin.moreCreativeTabs;
+package org.zipcoder.neutrontools.mixin.moreCreativeTabs;
 
 import me.hypherionmc.morecreativetabs.MoreCreativeTabs;
 import net.minecraft.server.packs.PackResources;

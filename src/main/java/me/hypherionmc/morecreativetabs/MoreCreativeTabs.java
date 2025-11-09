@@ -12,7 +12,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.IExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
-import org.zipcoder.utilsmod.NeutronTools;
+import org.zipcoder.neutrontools.NeutronTools;
 
 import java.util.ArrayList;
 import java.util.Map;

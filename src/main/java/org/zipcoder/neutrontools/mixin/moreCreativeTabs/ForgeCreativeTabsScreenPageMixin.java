@@ -1,4 +1,4 @@
-package org.zipcoder.utilsmod.mixin.moreCreativeTabs;
+package org.zipcoder.neutrontools.mixin.moreCreativeTabs;
 
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.client.gui.CreativeTabsScreenPage;

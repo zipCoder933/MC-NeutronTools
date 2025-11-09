@@ -11,7 +11,7 @@ import net.minecraftforge.client.event.RegisterClientCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import static org.zipcoder.utilsmod.commands.ModCommands.NAMESPACE;
+import static org.zipcoder.neutrontools.commands.ModCommands.NAMESPACE;
 
 /**
  * @author HypherionSA

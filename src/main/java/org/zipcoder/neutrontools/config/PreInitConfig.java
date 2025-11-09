@@ -1,4 +1,4 @@
-package org.zipcoder.utilsmod.config;
+package org.zipcoder.neutrontools.config;
 
 import com.electronwill.nightconfig.core.file.FileConfig;
 import com.electronwill.nightconfig.toml.TomlFormat;
@@ -7,7 +7,7 @@ import net.minecraftforge.fml.loading.FMLPaths;
 import java.io.File;
 import java.nio.file.Path;
 
-import static org.zipcoder.utilsmod.NeutronTools.LOGGER;
+import static org.zipcoder.neutrontools.NeutronTools.LOGGER;
 
 public class PreInitConfig {
     public PreInitConfig() {
@@ -32,7 +32,7 @@ public class PreInitConfig {
      * NO FLOATS ALLOWED!
      */
     //--------------------------------------------------------------------
-    public int portalWaitTime = 40;
+    public int portalWaitTime = 80;
     public boolean crashCommands = false;
     //--------------------------------------------------------------------
 

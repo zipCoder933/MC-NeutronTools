@@ -1,4 +1,4 @@
-package org.zipcoder.utilsmod.mixin;
+package org.zipcoder.neutrontools.mixin;
 
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.zipcoder.utilsmod.NeutronTools;
+import org.zipcoder.neutrontools.NeutronTools;
 
 import java.util.Collection;
 import java.util.Set;
