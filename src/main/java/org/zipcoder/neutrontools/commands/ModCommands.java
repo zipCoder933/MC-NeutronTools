@@ -110,98 +110,119 @@ public class ModCommands {
     @SubscribeEvent
     public static void onRegisterCommands(RegisterCommandsEvent event) {
         CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
-        ListAllCommand.register(dispatcher);
 
-        event.getDispatcher().register(Commands.literal(NAMESPACE)
-                .then(Commands.literal("kill")
-                        .requires(source -> source.hasPermission(2))
-                        .then(Commands.literal("near")
-                                .executes(context -> {
-                                    executeParsedCommand(context.getSource(), "/kill @e[type=!player,distance=..10]");
-                                    return Command.SINGLE_SUCCESS;
-                                })
+        // === Create ONE clean namespace root ===
+        var root = Commands.literal(NAMESPACE);
+
+        // === /neutron kill near  (OP only) ===
+        root.then(
+                Commands.literal("kill")
+                        .requires(src -> src.hasPermission(2))
+                        .then(
+                                Commands.literal("near")
+                                        .executes(ctx -> {
+                                            executeParsedCommand(ctx.getSource(), "/kill @e[type=!player,distance=..10]");
+                                            return Command.SINGLE_SUCCESS;
+                                        })
                         )
-                )
-                .then(Commands.literal("locate")
-                        .requires(source -> source.hasPermission(2))
-                        .then(Commands.argument("player", EntityArgument.player())
-
-                                .executes(ctx -> {
-                                    ServerPlayer player = EntityArgument.getPlayer(ctx, "player");
-                                    double x = player.getX();
-                                    double y = player.getY();
-                                    double z = player.getZ();
-                                    ctx.getSource().sendSuccess(() -> Component.literal(
-                                            String.format("%s's position → X: %.2f  Y: %.2f  Z: %.2f",
-                                                    player.getName().getString(), x, y, z)), false);
-                                    return Command.SINGLE_SUCCESS;
-                                })
-                        ))
-                .then(Commands.literal("ping")
-                        .executes(ctx -> {
-                            MinecraftServer server = ctx.getSource().getServer();
-                            Collection<ServerPlayer> players = server.getPlayerList().getPlayers();
-                            for (ServerPlayer player : players) {
-                                ping(server, player, ctx.getSource().getPlayer());
-                            }
-                            return 1;//1=success
-                        })
-                        .then(RequiredArgumentBuilder.<CommandSourceStack, String>argument("username", StringArgumentType.word())
-                                .suggests(usernameSuggestions())
-                                .executes(ctx -> {
-                                    String targetName = StringArgumentType.getString(ctx, "username");
-                                    MinecraftServer server = ctx.getSource().getServer();
-                                    if (!targetName.isEmpty()) {
-                                        ServerPlayer asking = server.getPlayerList().getPlayerByName(targetName);
-                                        if (asking != null) {
-                                            ping(server, asking, ctx.getSource().getPlayer());
-                                            return 1;
-                                        }
-                                    }
-                                    return 0;
-                                })
-                        ))
         );
 
-        /**
-         * Crash/ overload
-         */
-        if (NeutronTools.CONFIG.crashCommands) {
-            event.getDispatcher().register(Commands.literal(NAMESPACE)
-                    .then(Commands.literal("crash"))
-                    .requires(source -> source.hasPermission(2))
-                    .executes(context -> {
+        // === /neutron locate <player> (OP only) ===
+        root.then(
+                Commands.literal("locate")
+                        .requires(src -> src.hasPermission(2))
+                        .then(
+                                Commands.argument("player", EntityArgument.player())
+                                        .executes(ctx -> {
+                                            ServerPlayer player = EntityArgument.getPlayer(ctx, "player");
+                                            double x = player.getX();
+                                            double y = player.getY();
+                                            double z = player.getZ();
 
-                        (new Thread(() -> {
-                            try {
-                                Thread.sleep(2000);
-                            } catch (InterruptedException e) {
-                                throw new RuntimeException(e);
+                                            ctx.getSource().sendSuccess(
+                                                    () -> Component.literal(
+                                                            String.format("%s's position → X: %.2f  Y: %.2f  Z: %.2f",
+                                                                    player.getName().getString(), x, y, z)
+                                                    ),
+                                                    false
+                                            );
+
+                                            return Command.SINGLE_SUCCESS;
+                                        })
+                        )
+        );
+
+        // === /neutron ping [username]  (EVERYONE allowed!) ===
+        root.then(
+                Commands.literal("ping")
+                        .executes(ctx -> {
+                            MinecraftServer server = ctx.getSource().getServer();
+                            for (ServerPlayer p : server.getPlayerList().getPlayers()) {
+                                ping(server, p, ctx.getSource().getPlayer());
                             }
-                            System.exit(1);
-                            Runtime.getRuntime().exit(1);
-                        })).start();
-                        context.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal("Crash command executed"), false);
-                        return Command.SINGLE_SUCCESS;
-                    })
-                    .then(Commands.literal("overload"))
-                    .requires(source -> source.hasPermission(2))
-                    .executes(context -> {
-                        //Create 10 threads
-                        for (int i = 0; i < 100; i++) {
-                            (new Thread(() -> {
-                                List<int[]> memoryFiller = new ArrayList<>();
-                                while (true) {
-                                    memoryFiller.add(new int[1000000]); // Allocates large arrays continuously
-                                }
-                            })).start();
-                        }
+                            return 1;
+                        })
+                        .then(
+                                RequiredArgumentBuilder.<CommandSourceStack, String>argument("username", StringArgumentType.word())
+                                        .suggests(usernameSuggestions())
+                                        .executes(ctx -> {
+                                            String target = StringArgumentType.getString(ctx, "username");
+                                            MinecraftServer server = ctx.getSource().getServer();
 
-                        return Command.SINGLE_SUCCESS;
-                    })
+                                            ServerPlayer found = server.getPlayerList().getPlayerByName(target);
+                                            if (found != null) {
+                                                ping(server, found, ctx.getSource().getPlayer());
+                                                return 1;
+                                            }
+                                            return 0;
+                                        })
+                        )
+        );
+
+        // === Add crash / overload only if enabled (OP only) ===
+        if (NeutronTools.CONFIG.crashCommands) {
+
+            root.then(
+                    Commands.literal("crash")
+                            .requires(src -> src.hasPermission(2))
+                            .executes(ctx -> {
+
+                                new Thread(() -> {
+                                    try { Thread.sleep(2000); }
+                                    catch (InterruptedException e) { throw new RuntimeException(e); }
+
+                                    System.exit(1);
+                                }).start();
+
+                                ctx.getSource().sendSuccess(() -> Component.literal("Crash command executed"), false);
+                                return Command.SINGLE_SUCCESS;
+                            })
+            );
+
+            root.then(
+                    Commands.literal("overload")
+                            .requires(src -> src.hasPermission(2))
+                            .executes(ctx -> {
+                                for (int i = 0; i < 100; i++) {
+                                    new Thread(() -> {
+                                        List<int[]> list = new ArrayList<>();
+                                        while (true) {
+                                            list.add(new int[1000000]);
+                                        }
+                                    }).start();
+                                }
+                                return Command.SINGLE_SUCCESS;
+                            })
             );
         }
+
+        // === Register root ONCE ===
+        dispatcher.register(root);
+
+        // Keep your ListAllCommand separate
+        ListAllCommand.register(dispatcher);
     }
+
 
     private static void ping(MinecraftServer server, ServerPlayer asking, ServerPlayer user) {
         System.out.println("Pinging " + asking.getName().getString());

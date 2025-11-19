@@ -43,11 +43,9 @@ public class CreativeTabUtils {
         if (!stack.isEmpty()) {
             if (finalTabIcon.getNbt() != null && !finalTabIcon.getNbt().isEmpty()) { // Apply the Stack NBT
                 //TODO: Understand why this fails with some of the new item groups
-//                UtilsMod.LOGGER.info("Applying NBT to Item Tag {};\t Tab Name {}", finalTabIcon.getName(), json.getTabName());
                 try {
                     CompoundTag tag = TagParser.parseTag(finalTabIcon.getNbt());
                     stack.setTag(tag);
-//                    UtilsMod.LOGGER.info("NBT Data for tab icon {}", stack.getTags().toList());
                 } catch (Exception e) {
                     NeutronTools.LOGGER.error("Failed to Process NBT for Item Tag {};\t Tab Name {}", finalTabIcon.getName(), json.getTabName(), e);
                 }

@@ -21,23 +21,6 @@ public class NeutronTools {
     public static final Logger LOGGER = LogUtils.getLogger();
     public static final PreInitConfig CONFIG = new PreInitConfig();
 
-    /**
-     * Custom creative tab test
-     */
-//    public static final DeferredRegister<CreativeModeTab> TEST_CREATIVE_TABS =
-//            DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
-
-//    public static final RegistryObject<CreativeModeTab> COURSE_TAB = CREATIVE_MODE_TABS.register("course_tab",
-//            () -> CreativeModeTab.builder().icon(() -> new ItemStack(
-//                            Items.ACACIA_BOAT
-//                    ))
-//                    .title(Component.translatable("utilsmod.course_tab"))
-//                    .displayItems((displayParameters, output) -> {
-//                        output.accept(Items.ACACIA_BOAT);
-//                        output.accept(Items.SPRUCE_BOAT);
-//                        output.accept(Items.OAK_BOAT);
-//                        output.accept(Items.BIRCH_BOAT);
-//                    }).build());
     public NeutronTools() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
